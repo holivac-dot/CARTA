@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarjeta Especial RRHH</title>
+
+<style>
+
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Segoe UI', sans-serif;
+    overflow:hidden;
+    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1e3c72);
+    background-size:400% 400%;
+    animation: gradientMove 12s ease infinite;
+}
+
+@keyframes gradientMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.card{
+    width:430px;
+    padding:40px;
+    border-radius:25px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    border:1px solid rgba(255,255,255,0.2);
+    box-shadow:0 15px 35px rgba(0,0,0,0.4);
+    text-align:center;
+    color:white;
+    transform:scale(0.8);
+    opacity:0;
+    transition:all 1s ease;
+    position:relative;
+    overflow:hidden;
+    z-index:2;
+}
+
+.card.show{
+    transform:scale(1);
+    opacity:1;
+}
+
+.card.glow{
+    box-shadow:0 0 45px rgba(255,215,0,0.9);
+}
+
+.icon{
+    font-size:55px;
+    animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.2);}
+    100%{transform:scale(1);}
+}
+
+h1{
+    margin-bottom:15px;
+}
+
+p{
+    font-size:15px;
+    line-height:1.6;
+}
+
+button{
+    margin-top:20px;
+    padding:12px 25px;
+    border:none;
+    border-radius:30px;
+    background: linear-gradient(45deg,#ff416c,#ff4b2b);
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.1);
+}
+
+button.clicked{
+    background: linear-gradient(45deg,#ffd700,#ffb347);
+    color:#333;
+}
+
+.extra{
+    margin-top:20px;
+    font-size:15px;
+    opacity:0;
+    transform:scale(0.8);
+    transition:all 0.8s ease;
+}
+
+.extra.show{
+    opacity:1;
+    transform:scale(1);
+}
+
+/* Confetti */
+.confetti{
+    position:absolute;
+    width:8px;
+    height:8px;
+    animation:fall linear infinite;
+    z-index:1;
+}
+
+@keyframes fall{
+    0%{transform:translateY(-100vh) rotate(0);}
+    100%{transform:translateY(100vh) rotate(360deg);}
+}
+
+/* Corazones */
+.heart{
+    position:absolute;
+    font-size:18px;
+    animation:floatUp 6s linear infinite;
+    opacity:0.8;
+    z-index:1;
+}
+
+@keyframes floatUp{
+    0%{transform:translateY(100vh); opacity:0;}
+    20%{opacity:1;}
+    100%{transform:translateY(-10vh); opacity:0;}
+}
+
+/* Partículas doradas */
+.spark{
+    position:absolute;
+    width:6px;
+    height:6px;
+    background:gold;
+    border-radius:50%;
+    animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode{
+    from{transform:translate(0,0); opacity:1;}
+    to{transform:translate(var(--x), var(--y)); opacity:0;}
+}
+
+</style>
+</head>
+<body>
+
+<div class="card" id="card">
+    <div class="icon">❤️</div>
+    <h1>¡Gracias, Departamento de GTH!</h1>
+    <p>
+        Su compromiso, dedicación y apoyo constante fortalecen nuestra organización cada día.
+        Gracias por cuidar el talento humano que impulsa nuestro crecimiento.
+    </p>
+
+    <button id="btn" onclick="activarEfecto()">Mensaje Especial</button>
+
+    <div class="extra" id="extra">
+        💖 Ustedes son el corazón de nuestra organización.
+        Gracias por su entrega, profesionalismo y calidez humana.
+        ¡Su trabajo marca la diferencia todos los días! ✨
+    </div>
+</div>
+
+<script>
+
+window.onload = () =>{
+    document.getElementById("card").classList.add("show");
+    crearConfetti();
+    crearCorazones();
+}
+
+function activarEfecto(){
+    const card = document.getElementById("card");
+    const extra = document.getElementById("extra");
+    const btn = document.getElementById("btn");
+
+    card.classList.add("glow");
+    extra.classList.add("show");
+    btn.classList.add("clicked");
+    btn.innerText="💖 ¡Gracias GTH! 💖";
+
+    for(let i=0;i<30;i++){
+        let spark=document.createElement("div");
+        spark.classList.add("spark");
+        spark.style.left="50%";
+        spark.style.top="50%";
+        spark.style.setProperty('--x',(Math.random()*300-150)+"px");
+        spark.style.setProperty('--y',(Math.random()*300-150)+"px");
+        card.appendChild(spark);
+        setTimeout(()=> spark.remove(),1000);
+    }
+}
+
+function crearConfetti(){
+    for(let i=0;i<60;i++){
+        let confetti=document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.left=Math.random()*100+"vw";
+        confetti.style.backgroundColor=`hsl(${Math.random()*360},70%,60%)`;
+        confetti.style.animationDuration=(Math.random()*5+5)+"s";
+        document.body.appendChild(confetti);
+    }
+}
+
+function crearCorazones(){
+    setInterval(()=>{
+        let heart=document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML="💖";
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.animationDuration=(Math.random()*3+4)+"s";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),6000);
+    },800);
+}
+
+</script>
+
+</body>
+</html>
